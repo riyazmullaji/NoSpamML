@@ -1,0 +1,38 @@
+version: '3.8'  # You can choose to keep or remove this based on your needs
+
+services:
+  frontend:
+    build:
+      context: ./spam_frontend
+      dockerfile: Dockerfile
+    image: spam_frontend:v1.0
+    ports:
+      - 8501:8501
+    networks: 
+      SpamClassifier: 
+        aliases: 
+          - frontend.docker
+    depends_on:
+      - backend
+    volumes:
+      - ./spam_frontend:/app
+      - ./storage:/storage
+
+  backend:
+    build:
+      context: ./spam_backend/app  # Set context to app directory
+      dockerfile: Dockerfile        # Ensure this is correct
+    image: spam_backend:v1.0
+    ports:
+      - 8000:8000
+    networks: 
+      SpamClassifier: 
+        aliases: 
+          - backend.docker
+    volumes:
+      - ./spam_backend/app:/app  # This should be correct
+      - ./storage:/storage
+
+networks:
+  SpamClassifier:
+    driver: bridge
