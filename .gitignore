@@ -87,3 +87,6 @@ coverage.xml
 
 # Mypy cache
 .mypy_cache/
+
+# Ignore all logs and temporary files
+Docker_airflow/logs/
