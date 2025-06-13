@@ -6,21 +6,21 @@ A full-stack ML system for spam detection with end-to-end automation, monitoring
 
 ![Workflow Diagram](./spamML.jpg)
 
-> 🔁 End-to-end lifecycle: from raw data to model drift handling using Evidently and Airflow.
+>  End-to-end lifecycle: from raw data to model drift handling using Evidently and Airflow.
 
 ---
 
 ## 📌 Key Features
 
-- ✅ End-to-end pipeline from data to deployment
-- 🔎 Exploratory Data Analysis (EDA)
-- 🧠 Machine learning model using `scikit-learn`
-- 🧪 Spam classification with FastAPI backend
-- 🖥️ Interactive Streamlit frontend
-- 🐳 Dockerized infrastructure
-- 📈 Drift detection using Evidently AI
-- 🧬 Retraining automation via Apache Airflow
-- 🧾 MLflow-based experiment tracking and model registry
+-  End-to-end pipeline from data to deployment
+-  Exploratory Data Analysis (EDA)
+-  Machine learning model using `scikit-learn`
+-  Spam classification with FastAPI backend
+-  Interactive Streamlit frontend
+-  Dockerized infrastructure
+-  Drift detection using Evidently AI
+-  Retraining automation via Apache Airflow
+-  MLflow-based experiment tracking and model registry
 
 ---
 
@@ -132,6 +132,37 @@ In production, models often degrade over time due to data changes. **noSpamML** 
 ```
 
 
+## 🖼️ Project Screenshots
+
+### 🧩 1. Airflow DAG Panel
+
+Shows the Airflow DAG scheduled for monthly retraining and drift checks.
+
+![Airflow DAG](./Screenshots/af1.png)
+
+---
+
+### 🖥️ 2. FastAPI Backend Docs
+
+Interactive Swagger UI to test endpoints like `/predict`.
+
+![FastAPI Docs](./Screenshots/Backend.png)
+
+---
+
+### 🎛️ 3. Streamlit Frontend Interface
+
+Clean UI to input text and get spam predictions.
+
+![Frontend Interface](./Screenshots/interface.png)
+
+---
+
+### 📬 4. Sample Prediction Output
+
+Real-time classification output from the FastAPI backend.
+
+![Model Response](./Screenshots/response.png)
 
 
 
