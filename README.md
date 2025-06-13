@@ -1,79 +1,142 @@
-Spam_Classifier
-==============================
+# 📬 noSpamML – Scalable Spam Detection Pipeline
 
+A full-stack ML system for spam detection with end-to-end automation, monitoring, and user interaction.
 
+---
 
-Instructions
-------------
-1. Clone the repo.
-2. Run `make dirs` to create the missing parts of the directory structure described below.
-3. *Optional:* Run `make virtualenv` to create a python virtual environment. Skip if using conda or some other env manager.
-   1. Run `source env/bin/activate` to activate the virtualenv.
-4. Run `make requirements` to install required python packages.
-5. Put the raw data in `data/raw`.
-6. To save the raw data to the DVC cache, run `dvc add data/raw`
-7. Edit the code files to your heart's desire.
-8. Process your data, train and evaluate your model using `dvc repro` or `make reproduce`
-9. To run the pre-commit hooks, run `make pre-commit-install`
-10. For setting up data validation tests, run `make setup-setup-data-validation`
-11. For **running** the data validation tests, run `make run-data-validation`
-12. When you're happy with the result, commit files (including .dvc files) to git.
+![Workflow Diagram](./spamML.jpg)
 
-Project Organization
-------------
+> 🔁 End-to-end lifecycle: from raw data to model drift handling using Evidently and Airflow.
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make dirs` or `make clean`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   ├── raw.dvc        <- DVC file that tracks the raw data
-    │   └── raw            <- The original, immutable data dump
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │   └── metrics.txt    <- Relevant metrics after evaluating the model.
-    │   └── training_metrics.txt    <- Relevant metrics from training the model.
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- Makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   ├── great_expectations  <- Folder containing data integrity check files
-    │   │   ├── make_dataset.py
-    │   │   └── data_validation.py  <- Script to run data integrity checks
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    ├── .pre-commit-config.yaml  <- pre-commit hooks file with selected hooks for the projects.
-    ├── dvc.lock           <- The version definition of each dependency, stage, and output from the 
-    │                         data pipeline.
-    └── dvc.yaml           <- Defining the data pipeline stages, dependencies, and outputs.
+---
 
+## 📌 Key Features
 
---------
+- ✅ End-to-end pipeline from data to deployment
+- 🔎 Exploratory Data Analysis (EDA)
+- 🧠 Machine learning model using `scikit-learn`
+- 🧪 Spam classification with FastAPI backend
+- 🖥️ Interactive Streamlit frontend
+- 🐳 Dockerized infrastructure
+- 📈 Drift detection using Evidently AI
+- 🧬 Retraining automation via Apache Airflow
+- 🧾 MLflow-based experiment tracking and model registry
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+---
+
+##  Tech Stack
+
+| Layer             | Tools Used                      |
+|------------------|----------------------------------|
+| Model Training    | scikit-learn, pandas             |
+| Backend API       | FastAPI                         |
+| Frontend UI       | Streamlit                       |
+| Experiment Logs   | MLflow                          |
+| Drift Detection   | Evidently AI                    |
+| Containerization  | Docker, Docker Compose          |
+| Orchestration     | Apache Airflow                  |
+| Language          | Python 3.8+                     |
+
+---
 
 
 ---
 
-To create a project like this, just go to https://dagshub.com/repo/create and select the **Cookiecutter DVC** project template.
+##  Running Locally (Step-by-Step)
 
-Made with 🐶 by [DAGsHub](https://dagshub.com/).
+### 1. Clone the Repository
+
+Use Git to pull the project into your machine.
+> git clone https://github.com/riyazmullaji/noSpamML.git
+
+
+### 2. Build & Start with Docker Compose
+
+All services are dockerized (frontend, backend, MLflow).
+
+> docker-compose up --build
+
+
+After successful build, services run at:
+- Streamlit UI: `http://localhost:8501`
+- FastAPI backend: `http://localhost:8000/docs`
+- MLflow UI: `http://localhost:5000`
+
+### 3. Access Streamlit Frontend
+
+- Visit `http://localhost:8501` in browser
+- Upload a message or input text
+- Get prediction: `Spam` or `Not Spam`
+
+### 4. Access FastAPI Backend
+
+- Visit `http://localhost:8000/docs`
+- Use built-in Swagger UI to test `/predict` endpoint
+
+## 📉 Drift Detection & Model Retraining
+
+In production, models often degrade over time due to data changes. **noSpamML** integrates automated **data drift detection** and **conditional model retraining** using:
+
+- 🔍 **Evidently AI** – for detecting statistical drift in input data
+- 🐍 Python scripts – to retrain model on new/augmented data
+- 🛠️ **Airflow** – to orchestrate monthly drift checks and trigger retraining pipelines
+- 🐳 Docker – containerized execution for repeatability and deployment
+
+### 🔁 How it works
+
+1. **Drift Check**:
+   - Runs `drift_detection.py`
+   - Compares current input vs reference dataset (training data)
+   - If drift is detected, returns `True`
+
+2. **Conditional Retraining**:
+   - If drift is `True`, `model_retrain.py` is triggered
+   - Re-trains a new model using fresh data
+   - Saves model artifact to `/spam_backend/app/spam_classifier_pipeline.pkl`
+
+3. **Airflow DAG**:
+   - Monthly schedule (7th of each month)
+   - Controls flow using:
+     - `DockerOperator` for script containers
+     - `ShortCircuitOperator` to conditionally skip/execute retraining
+   - Uses `XComs` to pass drift detection result between tasks
+
+4. **Docker Image**:
+   - Custom-built: `drift_detection_env:1.0`
+   - Includes: `pandas`, `scikit-learn`, `evidently`, `numpy`
+
+### 🗃️ Paths & Volumes (Example)
+
+- `/opt/airflow/scripts/project_spam_classifier/drift_detection.py`
+- `/opt/airflow/scripts/project_spam_classifier/model_retrain.py`
+- Training data: `/opt/airflow/scripts/dataset/training_data.csv`
+- Output model: `/opt/airflow/spam_backend/app/`
+
+> Volumes mounted inside Airflow's `docker-compose.yaml` via absolute paths. Adjust them to your local paths as needed.
+
+---
+
+### ✅ Sample Workflow Summary
+
+```text
+              Input Data
+                  ↓
+         [Evidently AI Check]
+        drift_detection.py
+          ↓        ↓
+    [Drift: False]  [Drift: True]
+       No action     ↓
+              model_retrain.py
+                    ↓
+       Updated Model Stored & Used
+```
+
+
+
+
+
+
+
+
+> 🛡️ noSpamML aims to build trust in communication by catching unwanted content before it reaches users 
+
